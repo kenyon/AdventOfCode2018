@@ -30,6 +30,7 @@ ARGF.each do |line|
     'width'  => line.split()[3].split('x')[0].to_i,
     'height' => line.split()[3].split('x')[1].to_i,
   }
+
   input << claim
 end
 
@@ -45,7 +46,7 @@ fabric = Matrix.zero(1009)
 
 input.each do |claim|
   (0 .. claim['height'] - 1).each do |row|
-    (0 .. claim['width'] -1).each do |col|
+    (0 .. claim['width'] - 1).each do |col|
       fabric[claim['y'] + row, claim['x'] + col] += 1
     end
   end
@@ -59,3 +60,22 @@ fabric.each do |square_inch|
 end
 
 puts count
+
+# Day 3, Part 2: Identify the claim which has no overlaps.
+
+non_overlapping_claim_id = 0
+
+input.each do |claim|
+  overlapping = false
+
+  (0 .. claim['height'] - 1).each do |row|
+    (0 .. claim['width'] - 1).each do |col|
+      overlapping = true if fabric[claim['y'] + row, claim['x'] + col] > 1
+    end
+  end
+
+  non_overlapping_claim_id = claim['id']
+  break if overlapping == false
+end
+
+puts non_overlapping_claim_id
