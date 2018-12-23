@@ -61,4 +61,28 @@ ARGF.each do |line|
   end
 end
 
-puts guards.key(guards.values.max) * guards.values.max.slept_minutes.index(guards.values.max.slept_minutes.max)
+puts guards.key(guards.values.max) \
+     * guards.values.max.slept_minutes.index(guards.values.max.slept_minutes.max)
+
+# Day 4, Part 2: which guard is most frequently asleep on the same minute?
+# Output the product of the guard ID and the minute.
+
+# Hash of guard IDs to the minute of the hour that guard slept the
+# most, and how many times they slept on that minute.
+most_slept_minutes = Hash.new()
+
+guards.each do |id, guard|
+  most_slept_minutes[id] = { 'minute' => guard.slept_minutes.index(guard.slept_minutes.max),
+                             'count' => guard.slept_minutes.max,
+                           }
+end
+
+max = { 'id' => 0, 'minute' => 0, 'count' => 0 }
+
+most_slept_minutes.each do |id, v|
+  max = v['count'] > max['count'] \
+        ? {'id' => id, 'minute' => v['minute'], 'count' => v['count'] }
+        : max
+end
+
+puts max['id'] * max['minute']
